@@ -45,7 +45,7 @@ module test_conway_cell;
       @(negedge clk);
       neighbors = i[7:0];
       @(posedge clk);
-      $display("%b : %b: %b", neighbors, state_d, state_q);
+      #1 $display("%b : %b: %b", neighbors, state_d, state_q);
     end
 
     #10;
