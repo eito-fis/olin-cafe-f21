@@ -1,0 +1,263 @@
+
+*** Running vivado
+    with args -log main.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source main.tcl
+
+
+****** Vivado v2021.1 (64-bit)
+  **** SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+  **** IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+    ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+
+source main.tcl -notrace
+Command: synth_design -top main -part xc7a15tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a15t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a15t'
+INFO: [Device 21-403] Loading part xc7a15tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 24682
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 2470.164 ; gain = 0.000 ; free physical = 21587 ; free virtual = 26697
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'main' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/main.sv:27]
+INFO: [Synth 8-6157] synthesizing module 'conway_cell' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/conway_cell.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'adder_1_2' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_1_2.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'adder_1_2' (1#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_1_2.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'adder_2_3' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_2_3.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'adder_2_3' (2#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_2_3.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'adder_3_4' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_3_4.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'adder_3_4' (3#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/adder_3_4.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'conway_cell' (4#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/conway_cell.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'led_array_driver' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/led_array_driver.sv:3]
+	Parameter N bound to: 5 - type: integer 
+	Parameter ROWS bound to: 5 - type: integer 
+	Parameter COLS bound to: 5 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'decoder_3_to_8' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_3_to_8.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'decoder_1_to_2' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_1_to_2.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'decoder_1_to_2' (5#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_1_to_2.sv:1]
+INFO: [Synth 8-6157] synthesizing module 'decoder_2_to_4' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_2_to_4.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'decoder_2_to_4' (6#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_2_to_4.sv:1]
+INFO: [Synth 8-6155] done synthesizing module 'decoder_3_to_8' (7#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/decoder_3_to_8.sv:1]
+WARNING: [Synth 8-689] width (4) of port connection 'in' does not match port width (3) of module 'decoder_3_to_8' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/led_array_driver.sv:30]
+WARNING: [Synth 8-689] width (5) of port connection 'out' does not match port width (8) of module 'decoder_3_to_8' [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/led_array_driver.sv:30]
+INFO: [Synth 8-6155] done synthesizing module 'led_array_driver' (8#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/led_array_driver.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'main' (9#1) [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/main.sv:27]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2470.164 ; gain = 0.000 ; free physical = 20858 ; free virtual = 25957
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2470.164 ; gain = 0.000 ; free physical = 20718 ; free virtual = 25819
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2470.164 ; gain = 0.000 ; free physical = 20718 ; free virtual = 25819
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2470.164 ; gain = 0.000 ; free physical = 20711 ; free virtual = 25812
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc]
+WARNING: [Vivado 12-584] No ports matched 'rows[7]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:20]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:20]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'rows[6]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:21]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:21]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'rows[5]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:22]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:22]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'cols[7]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:30]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:30]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'cols[6]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:31]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:31]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'cols[5]'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:32]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:32]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'step_game'. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:40]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc:40]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+Finished Parsing XDC File [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/01_game_of_life.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/main_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/main_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2534.066 ; gain = 0.000 ; free physical = 21457 ; free virtual = 26561
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2534.066 ; gain = 0.000 ; free physical = 21457 ; free virtual = 26561
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21534 ; free virtual = 26640
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a15tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21534 ; free virtual = 26640
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21534 ; free virtual = 26640
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21524 ; free virtual = 26631
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input    4 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 551   
++---Registers : 
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 25    
++---Muxes : 
+	   2 Input    1 Bit        Muxes := 26    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 45 (col length:60)
+BRAMs: 50 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21514 ; free virtual = 26616
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21402 ; free virtual = 26505
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21395 ; free virtual = 26497
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21395 ; free virtual = 26497
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |     4|
+|3     |LUT1   |     1|
+|4     |LUT2   |    38|
+|5     |LUT3   |    20|
+|6     |LUT4   |     4|
+|7     |LUT5   |    10|
+|8     |LUT6   |    63|
+|9     |MUXF7  |     3|
+|10    |FDRE   |    39|
+|11    |FDSE   |     3|
+|12    |IBUF   |     3|
+|13    |OBUF   |    15|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21362 ; free virtual = 26483
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2534.066 ; gain = 0.000 ; free physical = 21416 ; free virtual = 26537
+Synthesis Optimization Complete : Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 2534.066 ; gain = 63.902 ; free physical = 21416 ; free virtual = 26537
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2534.066 ; gain = 0.000 ; free physical = 21422 ; free virtual = 26530
+INFO: [Netlist 29-17] Analyzing 7 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2534.066 ; gain = 0.000 ; free physical = 21455 ; free virtual = 26563
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: f5a2e832
+INFO: [Common 17-83] Releasing license: Synthesis
+33 Infos, 9 Warnings, 7 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:28 ; elapsed = 00:00:23 . Memory (MB): peak = 2534.066 ; gain = 64.031 ; free physical = 21600 ; free virtual = 26712
+INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
+INFO: [Common 17-1381] The checkpoint '/home/l05/code/olin/comparch/olin-cafe-f21/01_game_of_life/xilinx/01_game_of_life.runs/synth_1/main.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file main_utilization_synth.rpt -pb main_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Oct 11 14:04:38 2021...

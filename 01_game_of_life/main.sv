@@ -28,7 +28,7 @@ module main(clk, buttons, leds, rgb, cols, rows);
   //Module I/O and parameters
   parameter game_divider = 23; // A clock divider parameter - 12 MHz / 2^23 is about 1 Hz (human visible speed).
   parameter display_divider = 12; // 12 to 17 are good values. Need to PWM the LEDs faster than the game clock.
-  parameter N = 8; // Size of the grid
+  parameter N = 5; // Size of the grid
   parameter M = N + 2; // Size of the grid, plus a border all around (makes wiring way easier).
   // Parameter checks.
   initial if (N < 3) $error("N has to be >= 3 to make for interesting patterns.");
@@ -71,38 +71,39 @@ module main(clk, buttons, leds, rgb, cols, rows);
   // Instantiate the LED Driver Module
   led_array_driver #(.ROWS(N), .COLS(N), .N(N)) LED_DRIVER (
     .ena(1'b1),
-`ifdef DISABLE_GAME
-    .cells(cells_0),
-`else
-    .cells(cells_q),
-`endif
-    .x(x),
+		`ifdef DISABLE_GAME
+				.cells(cells_0),
+		`else
+				.cells(cells_q),
+		`endif
+		.x(x),
     .rows(rows[N-1:0]),
     .cols(cols[N-1:0])
   );
 
   // Initialize the grid. 
-`define MANUAL_INITIAL_CONDITION // Uncomment to use the second clause for different initial conditions!
-  always_comb begin 
-`ifndef MANUAL_INITIAL_CONDITION
-    // This sets up the "blinker" oscillator in the center of a grid.
-    bordered_cells_0[M*M-1:M*M/2+2] = 0;
-    bordered_cells_0[M*M/2+1:M*M/2-1] = 3'b111;
-    bordered_cells_0[M*M/2-2:0] = 0;
-`else // MANUAL_INITIAL_CONDITION
-    // You will need to update the constants and size based on the size M.
-    if (N == 5) begin
-      bordered_cells_0 = `INIT_5x5_STATIC_TUB;
-    end else if (N == 8) begin
-      // Last implementation is what counts.
-      bordered_cells_0 = `INIT_8x8_GLIDER;
-      // bordered_cells_0 = `INIT_8x8_ALTERNATING;     
-    end else if (N==15) begin
-      bordered_cells_0 = `INIT_13x13_PULSAR;
-    end else begin
-      bordered_cells_0 = {M*M {1'b1}};
-    end
-`endif // MANUAL_INITIAL_CONDITION
+	`define MANUAL_INITIAL_CONDITION // Uncomment to use the second clause for different initial conditions!
+	always_comb begin 
+		`ifndef MANUAL_INITIAL_CONDITION
+			// This sets up the "blinker" oscillator in the center of a grid.
+			bordered_cells_0[M*M-1:M*M/2+2] = 0;
+			bordered_cells_0[M*M/2+1:M*M/2-1] = 3'b111;
+			bordered_cells_0[M*M/2-2:0] = 0;
+		`else // MANUAL_INITIAL_CONDITION
+			// You will need to update the constants and size based on the size M.
+			if (N == 5) begin
+				bordered_cells_0 = `INIT_5x5_PERIOD2_BLINKER;
+				/* bordered_cells_0 = `INIT_5x5_STATIC_TUB; */
+			end else if (N == 8) begin
+				// Last implementation is what counts.
+				bordered_cells_0 = `INIT_8x8_GLIDER;
+				// bordered_cells_0 = `INIT_8x8_ALTERNATING;     
+			end else if (N==15) begin
+				bordered_cells_0 = `INIT_13x13_PULSAR;
+			end else begin
+				bordered_cells_0 = {M*M {1'b1}};
+			end
+		`endif // MANUAL_INITIAL_CONDITION
   end
 
   /*
@@ -235,11 +236,12 @@ module main(clk, buttons, leds, rgb, cols, rows);
         
     end
   end  
-`ifdef SIMULATION
-  always_comb step_game = 1; // Run at full speed if simulating.
-`else
-  always_comb step_game = game_counter[game_divider]; // Run at slow human eye speeds in real life.
-`endif // SIMULATION
+	`ifdef SIMULATION
+		always_comb step_game = 1; // Run at full speed if simulating.
+	`else
+		/* always_comb step_game = game_counter[game_divider]; // Run at slow human eye speeds in real life. */
+		always_comb step_game = game_counter[game_divider]; // Run at slow human eye speeds in real life.
+	`endif // SIMULATION
  
 
 endmodule

@@ -1,56 +1,5 @@
 `default_nettype none
 
-module adder_1_2(a, b, cin, out);
-	input wire a;
-	input wire b;
-	input wire cin;
-
-	output logic [1:0] out;
-
-	logic p;
-	logic g;
-
-	always_comb begin
-		p = a ^ b;
-		g = a & b;
-
-		out[0] = p ^ cin;
-		out[1] = g | (p & cin);
-	end
-endmodule
-
-module adder_2_3(a, b, cin, out);
-	input wire [1:0] a;
-	input wire [1:0] b;
-	input wire cin;
-
-	output logic [2:0] out;
-
-	logic [1:0] first_digit;
-
-	adder_1_2 adder_first(a[0], b[0], 1'b0, first_digit);
-	adder_1_2 adder_second(a[1], b[1], first_digit[1], out[2:1]);
-	always_comb begin
-		out[0] = first_digit[0];
-	end
-endmodule
-
-module adder_3_4(a, b, cin, out);
-	input wire [2:0] a;
-	input wire [2:0] b;
-	input wire cin;
-
-	output logic [3:0] out;
-
-	logic [2:0] first_digits;
-
-	adder_2_3 adder_first(a[1:0], b[1:0], 1'b0, first_digits);
-	adder_1_2 adder_second(a[2], b[2], first_digits[2], out[3:2]);
-	always_comb begin
-		out[1:0] = first_digits[1:0];
-	end
-endmodule
-
 module conway_cell(clk, rst, ena, state_0, state_d, state_q, neighbors);
   input wire clk;
   input wire rst;

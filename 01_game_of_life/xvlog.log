@@ -1,0 +1,12 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/tmp/nvimcKZ6fw/5/test_main.sv" into library work
+INFO: [VRFC 10-311] analyzing module test_main
+WARNING: [VRFC 10-8374] loop variable declaration is not allowed in this mode of Verilog [/tmp/nvimcKZ6fw/5/test_main.sv:49]
+WARNING: [VRFC 10-8374] loop variable declaration is not allowed in this mode of Verilog [/tmp/nvimcKZ6fw/5/test_main.sv:45]
+ERROR: [VRFC 10-2939] 'logic' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:11]
+ERROR: [VRFC 10-2939] 'logic' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:12]
+ERROR: [VRFC 10-2939] 'int' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:26]
+ERROR: [VRFC 10-2939] 'int' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:31]
+ERROR: [VRFC 10-2939] 'logic' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:32]
+ERROR: [VRFC 10-2939] 'int' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:45]
+ERROR: [VRFC 10-2939] 'int' is an unknown type [/tmp/nvimcKZ6fw/5/test_main.sv:49]
+ERROR: [VRFC 10-2865] module 'test_main' ignored due to previous errors [/tmp/nvimcKZ6fw/5/test_main.sv:6]
