@@ -14,8 +14,7 @@ module test_adder;
 	logic [N-1:0] correct_out;
 
 	always_comb begin
-		cin = 0;
-		correct_out = a + b;
+		correct_out = a + b + cin;
 	end
 
   adder32 #(.N(N)) UUT(
@@ -31,11 +30,15 @@ module test_adder;
 
 			a = $random();
 			b = $random();
-      #5 $display("Testing %d + %d...", a, b);
-      #5 $display("%d | %d", out, correct_out);
-			assert(out === correct_out) else begin
-				$display("ERROR");
-				errors = errors + 1;
+
+			for (int c = 0; c < 2; c = c + 1) begin
+				cin = c;
+				#5 $display("Testing %d + %d + %d...", a, b, cin);
+				#5 $display("%d | %d", out, correct_out);
+				assert(out === correct_out) else begin
+					$display("ERROR");
+					errors = errors + 1;
+				end
 			end
 
     end

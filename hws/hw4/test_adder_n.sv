@@ -22,7 +22,7 @@ module test_adder;
 	);
 
   initial begin
-		$dumpfile("adder32.vcd");
+		$dumpfile("adder_n.vcd");
 		$dumpvars(0, UUT);
     
     $display("in opts | out");
