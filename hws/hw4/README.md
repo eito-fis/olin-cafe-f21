@@ -1,4 +1,5 @@
 # HW 4
+Section 1 can be found in the `docs/` folder.
 
 ## MUX 32
 To implement the 32:1 mux, I used a divide and conquer strategy. I noticed that a 4:1
@@ -40,3 +41,4 @@ layers for any valid N. The tests for the N bit adder are the same as the 32 bit
 adder, but with 64 bits.
 
 To run tests: `make test_adder` or `make test_adder_n`
+
