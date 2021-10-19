@@ -1,60 +1,40 @@
-# Lab Submission Checklist
+# HW 4
 
-[ ] Lab log/design notebook. You can put your notes in this README, but any sketches/etc. should be included, preferably in PDF form, inside the `docs` directory.
-[ ] Verilog files, FPGA configuration, etc.
-[ ] Demo Check Ins - Get instructor sign offs on:
-  [ ] Working 3_to_8 decoder simulation.
-  [ ] Working game of life (test_main) simulation
-  [ ] FPGA flashing - change the button gates
-  [ ] FPGA flashing - working led array driver
+## MUX 32
+To implement the 32:1 mux, I used a divide and conquer strategy. I noticed that a 4:1
+mux could be implemented using 2 2:1 muxes, one for each bit in the input. Similarly, a
+8:1 mux could be implemented using a 2:1 mux and a 4:1, and so on so forth. At each
+iteration, the most significant bit of the input is used to drive a 2:1 mux which
+chooses one of two muxes of one size less (`num options / 2`) that handle the rest of the
+input.
 
-Bonus:
-[ ] Expand the grid from 5x5 to 8x8 using hand written logic.
-[ ] Learn how to use generate statements to automate led_array logic for any size grid (see main.sv for example).
+To test the mux I used a relatively simple approach. I iterated over all possible input
+values, and tested an output of 0 or 1. For example, when input = 8 I first
+tested that the output was 0 when the 8th option was 0, and then tested that the output
+was 1 when the 8th option was 1. This method does not adequately cover all cases - for
+example, if we were reading 0s offset by one we would never detect it, since the rest of
+the bitstring is also 0s. A complementary approach would be to test with randomized
+bitstrings against verilog's indexing, but I ran out of time.
 
-# Reference Materials
-- [Cmod A7 FPGA Reference](https://digilent.com/reference/programmable-logic/cmod-a7/reference-manual)
-- [8x8 LED Display Datasheet](https://cdn-shop.adafruit.com/datasheets/454datasheet.pdf) 
+To run tests: `make test_mux`
 
-# Lab Walkthrough
+## ADDER 32
+I implemented a prefix adder two ways. To start, I hardcoded a 32 bit prefix adder (See
+figure 5.7 on page 242 for my reference). I initially defined the 3 base modules: the
+starting prefix module, the middle prefix module, and the output module. Then, I
+manually defined each of the 5 layers of prefix calculations. For these, I used a single
+for loop to identify where each 'block' of prefixes started, but then had to hardcode
+the individual units within the block, as the layer each unit pulled from varied. To
+test, I used a random approach similar to the test_multiplier example.
 
-There is  a `Makefile` in this project which lets us use `make target_name` to do various things in the project. For example `make clean` will get rid of all the generated files, and is very useful as a sanity check.
+I also implemented an arbitrary size prefix adder. While writing the 32 bit adder, I
+noticed that the start and end of each block could be defined by the current depth
+(starts at `2 ** depth` and contains `2 ** (depth + 1)` bits). I also noticed that the layer
+from which a unit pulls from could be defined by the offset within the block
+(`$clog2(offset + 1)`). The first pattern allowed me to write a for loop to produce all
+layers at once, and the second pattern allowed me to write a for loop to produce all
+units within a block. Together, I got a triple for loop that compactly produces the
+required layers for any valid N. The tests for the N bit adder are the same as the 32
+bit adder, but with 64 bits.
 
-There should be enough examples to get you started, but in general:
-- `make test_foo` will compile and run a simulation that you can then view with `gtkwave`. 
-- `make main.bit` calls Vivado from the command line - *you will need to run `setup_xilinx` first!*
-- `make program_fpga` calls Vivado from the command line - this assumes you've finished the cable driver part of the installation.
-- `make submission` - call after `make clean`, creates a zip file of the things we need to grade you!
-
-## 1. Simulation Practice
-This lab requires a 3:8 decoder. Template `.sv` files have been made for you, including a `test_decoders.sv` testbench. Create your 3:8 decoder, then show how you tested in in `test_decoders.sv`
-
-## 2. Conway's Game of Life - Cell Module
-Edit `conway_cell.sv` and use `test_conway_cell.sv` to implement combinational logic and a flip flop that follows these rules:
-1. Any live cell with two or three live neighbours survives (becomes 1'b1 at posedge clk).
-2. Any dead cell with three live neighbours becomes a live cell (becomes 1'b1 at posedge clk).
-3. All other live cells die in the next generation. Similarly, all other dead cells stay dead. (becomes 1'b0 at posedge clk).
-
-Once it works, you can run `make test_main` to see a simulation of the full grid!
-
-See if you can follow the examples in `main.sv` to change your initial conditions. If you change N you can simulate larger and larger grids! I put a fun `pulsar` example in for `N == 15`.
-
-## 3. Flashing the FPGA
-Ask the instructor for an FPGA and stub USB cable. The micro-usb connector on the FPGA is very fragile - *avoid plugging and unplugging directly into that!* Instead unplug and replug from the extension cable when power on and off.
-
-*NEVER modify your breadboard circuitry while the FPGA is plugged in!*
-
-The `main.sv` file has some simple logic for the built in LEDs based on the buttons. 
-  - See if you can a) flash the FPGA and have it do what the code describes using `make program_fpga` or the gui (tutorial in class).
-  - Alter the button -> leds logic, then reflash to confirm that you can make changes!
-
-## 4. LED Array Driver
-- Read the datasheet of the LED driver to implement combinational logic that can drive the row and column pins of the LED array. This is pretty challenging, but think about what the voltages need to be at the row pin or the column pin based on the cell status and the status of our x decoder.
-
-## 5. Build the circuit! 
-
-See the schematic in the lecture notes and implement that on your breadboard. You only need to implement a 5x5 grid for the lab (though the 8x8 is much more fun). To avoid damaging LEDs contact an instructor before powering the circuit up!
-
-If it doesn't work, debug in simulation first! 
-
-
+To run tests: `make test_adder` or `make test_adder_n`
