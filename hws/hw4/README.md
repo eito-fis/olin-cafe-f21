@@ -33,8 +33,10 @@ noticed that the start and end of each block could be defined by the current dep
 from which a unit pulls from could be defined by the offset within the block
 (`$clog2(offset + 1)`). The first pattern allowed me to write a for loop to produce all
 layers at once, and the second pattern allowed me to write a for loop to produce all
-units within a block. Together, I got a triple for loop that compactly produces the
-required layers for any valid N. The tests for the N bit adder are the same as the 32
-bit adder, but with 64 bits.
+units within a block. The final piece was rewriting the 12 (6 for `p` and 6 for
+`g`) variables I was using for layers into two arrays (one for `p` and one for
+`g`). In all, I was left with a triple for loop that produces the required
+layers for any valid N. The tests for the N bit adder are the same as the 32 bit
+adder, but with 64 bits.
 
 To run tests: `make test_adder` or `make test_adder_n`
