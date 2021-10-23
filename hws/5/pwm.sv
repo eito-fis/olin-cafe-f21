@@ -27,12 +27,7 @@ always_ff @(posedge clk) begin
 		counter <= 0;
 	end
 	else if (step) begin
-		if (& counter) begin
-			counter <= 0;
-		end
-		else begin
-			counter <= counter + 1;	
-		end
+		counter <= counter + 1;	
 	end
 end
 
