@@ -13,6 +13,28 @@ input wire [N-1:0] duty; // The "duty cycle" input.
 output logic out;
 
 logic [N-1:0] counter;
+logic duty_out;
+logic duty_is_not_zero;
+
+always_comb begin
+	duty_out = counter <= duty;
+	duty_is_not_zero = | duty;
+	out = duty_out & ena & duty_is_not_zero; 
+end
+
+always_ff @(posedge clk) begin
+	if (rst) begin
+		counter <= 0;
+	end
+	else if (step) begin
+		if (& counter) begin
+			counter <= 0;
+		end
+		else begin
+			counter <= counter + 1;	
+		end
+	end
+end
 
 // Create combinational (always_comb) and sequential (always_ff @(posedge clk)) 
 // logic that drives the out signal.
