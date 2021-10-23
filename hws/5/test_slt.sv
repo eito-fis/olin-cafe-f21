@@ -35,7 +35,7 @@ end
 // You can make "tasks" in testbenches. Think of them like methods of a class, 
 // they have access to the member variables.
 task print_io;
-  $display("%d < %d (%d)", a, b, out, correct_out);
+  $display("%d < %d (%d) %d", a, b, out, correct_out);
 endtask
 
 
@@ -87,7 +87,7 @@ end
 always @(a or b) begin
   #1;
   assert(out === correct_out) else begin
-    $display("  ERROR: sum should be %b, is %b", out, correct_out);
+    $display("  ERROR: sum should be %b, is %b", correct_out, out);
     errors = errors + 1;
   end
 end
