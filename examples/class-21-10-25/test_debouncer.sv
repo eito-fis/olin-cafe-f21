@@ -44,9 +44,14 @@ initial begin
   repeat (10) @(posedge clk);
 
   $finish;
-  
 
+end
 
+// Put a timeout to make sure the simulation doesn't run forever.
+initial begin
+  repeat (1000) @(posedge clk);
+  $display("Test timed out. Check your FSM logic, or increase MAX_CYCLES");
+  $finish;
 end
 
 endmodule
