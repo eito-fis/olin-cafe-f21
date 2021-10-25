@@ -40,5 +40,21 @@ end
 // You can use behavioural combinational logic, but try to keep your sequential
 //   and combinational blocks as separate as possible.
 
+// SOLUTION START
+
+always_comb begin
+  out = ena & ( (counter < duty) | &counter );
+end
+
+always_ff @(posedge clk) begin
+  if(rst) begin
+    counter <=0;
+  end
+  else if (step) begin
+    counter <= counter + 1;
+  end
+end
+
+// SOLUTION END
 
 endmodule
