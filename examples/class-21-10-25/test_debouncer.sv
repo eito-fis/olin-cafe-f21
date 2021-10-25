@@ -11,7 +11,7 @@ logic bouncy_in;
 
 wire debounced_out;
 
-debouncer #(.BOUNCE_TICKS(100)) UUT (
+debouncer #(.BOUNCE_TICKS(4)) UUT (
   .clk(clk), .rst(rst), .bouncy_in(bouncy_in), 
   .debounced_out(debounced_out)
 );
@@ -33,15 +33,16 @@ initial begin
   rst = 0;
 
   // simulation of a bounce!
-  bounces = ($urandom % 20) + 10;
+  bounces = ($urandom % 20) + 100;
   $display("starting a bounce sequence %d", bounces);
   for(int i = 0; i < bounces; i = i + 1) begin
     delay = ($urandom % 15) + 1;
     $display("bouncing with delay %d", delay);
     #(delay) bouncy_in = $urandom;
   end
+	bouncy_in = 1;
 
-  repeat (10) @(posedge clk);
+  repeat (250) @(posedge clk);
 
   $finish;
 
