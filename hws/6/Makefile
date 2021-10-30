@@ -35,4 +35,4 @@ clean:
 
 # Call this to generate your submission zip file.
 submission:
-	zip submission.zip Makefile *.sv *.pdf
+	zip submission.zip Makefile *.sv *.pdf *.py
