@@ -48,11 +48,11 @@ initial begin
         #10;
       end
     end
-    for(int i = 0; i < N_RANDOM_TESTS; i = i + 1) begin
-      a = $random;
-      b = $random;
-      #10;
-    end
+    /* for(int i = 0; i < N_RANDOM_TESTS; i = i + 1) begin */
+    /*   a = $random; */
+    /*   b = $random; */
+    /*   #10; */
+    /* end */
     #10;
     if(control == control.last) loop = 0;;
     control = control.next;

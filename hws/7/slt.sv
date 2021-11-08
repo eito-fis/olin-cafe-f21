@@ -35,18 +35,6 @@ adder_n #(.N(N)) SUBTRACTOR(
 // positive number is 1 less than the largest possible negative number you need
 // the two operands to be the same sign to cause any issues.
 
-`ifdef MUX_APPROACH
-
-mux4 #(.N(1)) SLT_MUX(
-  .switch({a[31], b[31]}), // switch on the sign bits
-  .in0(difference[N-1]), .in1(1'b0), .in2(1'b1), .in3(difference[N-1]),
-  .out(out)
-);
-`endif
-
-`define CLEVER_GATES_APPROACH
-`ifdef CLEVER_GATES_APPROACH
-
 logic inputs_have_different_signs;
 logic a_negative_b_positive;
 logic a_positive_b_negative;
@@ -56,8 +44,6 @@ always_comb begin : slt_all_cases
   inputs_have_different_signs = a[31] ^ b[31]; // unused, but kinda neat. 
   out = ~a_positive_b_negative & (a_negative_b_positive |  difference[31]);
 end
-
-`endif
 
 // SOLUTION END
 
