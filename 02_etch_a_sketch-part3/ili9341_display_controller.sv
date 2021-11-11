@@ -134,7 +134,13 @@ always_comb begin  : test_pattern
     pixel_color = WHITE;
   end
   else begin
-    case({pixel_x[4], pixel_y[4]})
+    /* case({pixel_x[4], pixel_y[4]}) */
+    /*   2'b00: pixel_color = RED; */
+    /*   2'b01: pixel_color = GREEN; */
+    /*   2'b10: pixel_color = BLUE; */
+    /*   2'b11: pixel_color = BLACK; */
+    /* endcase */
+    case(pixel_x[2:1])
       2'b00: pixel_color = RED;
       2'b01: pixel_color = GREEN;
       2'b10: pixel_color = BLUE;
