@@ -1,0 +1,2 @@
+Added comments for all 4 files - reading through them was really interesting.
+Otherwise used the provided solutions.
