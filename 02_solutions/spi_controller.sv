@@ -33,6 +33,7 @@ enum logic [2:0] {S_IDLE, S_TXING, S_TX_DONE, S_RXING, S_RX_DONE, S_ERROR } stat
 logic [15:0] tx_data;
 logic [23:0] rx_data;
 
+// Ensures csb is low during transactions
 always_comb begin : csb_logic
   case(state)
     S_IDLE, S_ERROR : csb = 1;
@@ -41,6 +42,8 @@ always_comb begin : csb_logic
   endcase
 end
 
+// Main out is transmission data indexed by bit counter
+// Only outputs when state is in transmitting
 always_comb begin : mosi_logic
   mosi = tx_data[bit_counter[4:0]] & (state == S_TXING);
 end
@@ -64,7 +67,7 @@ always_ff @(posedge clk) begin : spi_controller_fsm
     sclk <= 0;
     bit_counter <= 0;
     o_valid <= 0;
-    i_ready <= 1;
+    i_ready <= 1; // Ready for input
     tx_data <= 0;
     rx_data <= 0;
     o_data <= 0;
@@ -74,7 +77,9 @@ always_ff @(posedge clk) begin : spi_controller_fsm
 // SOLUTION START
         i_ready <= 1;
         sclk <= 0;
+				// If the data is stable and ready for transmission
         if(i_valid) begin
+					// Store data in tx_data and switch to transmission state
           tx_data <= i_data;
           rx_data <= 0;
           i_ready <= 0;
@@ -96,7 +101,9 @@ always_ff @(posedge clk) begin : spi_controller_fsm
 // SOLUTION START
 // SOLUTION END
         end else begin // negative edge logic
-          
+					// Decrement bit counter every negative edge
+					// Note the CL means the output is transmission data indexed by bit
+					// counter, so this iterates over all transmission data bits
           if(bit_counter != 0) begin
             bit_counter <= bit_counter - 1;
           end else begin
@@ -107,6 +114,8 @@ always_ff @(posedge clk) begin : spi_controller_fsm
       S_TX_DONE : begin
         // sclk <= ~sclk; //TODO@(avinash)
         // Next State Logic
+				// If in write mode, go straight to idle and become ready
+				// Else, move to receiving
         case (spi_mode)
           WRITE_8, WRITE_16: begin
               state <= S_IDLE;
@@ -126,6 +135,8 @@ always_ff @(posedge clk) begin : spi_controller_fsm
       S_RXING : begin
         sclk <= ~sclk;
         if(~sclk) begin // positive edge logic
+					// Decrement bit counter. When reaches 0, copy data to o_data, move
+					// to idle and set valid when.
           if(bit_counter != 0) begin
             bit_counter <= bit_counter - 1;
           end else begin
@@ -135,6 +146,7 @@ always_ff @(posedge clk) begin : spi_controller_fsm
             i_ready <= 1; // This logic would have to change if we wanted to use o_ready.
           end
         end else begin // negative edge logic
+					// Write secondary out to the data
           rx_data[bit_counter] <= miso;
         end
       end

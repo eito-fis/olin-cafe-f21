@@ -132,20 +132,23 @@ always_comb case (state)
   default : spi_mode = WRITE_16;
 endcase
 
+// hsync true when pixel at right edge
+// ysync true when pixel at bottom right corner
 always_comb begin
   hsync = pixel_x == (DISPLAY_WIDTH-1);
   vsync = hsync & (pixel_y == (DISPLAY_HEIGHT-1));
 end
 
 
-
-
 always_comb begin  : draw_cursor_logic
-  vram_rd_addr = pixel_y*DISPLAY_WIDTH + pixel_x;
+  vram_rd_addr = pixel_y*DISPLAY_WIDTH + pixel_x; // Calculature current address in ram
   if(touch.valid & (touch.x[8:2] == pixel_x[8:2]) 
     & (touch.y[8:2] == pixel_y[8:2])) begin
+		// If touch is valid and touch location (about) matches the pixel we are currently 
+		// processing, set the pixel color to white
     pixel_color = WHITE;
   end else begin
+		// Otherwise, use the stored color value
     pixel_color = vram_rd_data;
   end
 end
@@ -168,17 +171,25 @@ always_ff @(posedge clk) begin : main_fsm
   else if(ena) begin
     case (state)
       S_INIT: begin
+				// Configuration states
+				// Reads through the loaded rom and runs specified commands
+				// Format byte by byte is [num_bytes], [command], [data] * num_bytes ...
+				// Terminated by null byte for num_bytes or command
         case (cfg_state)
           S_CFG_GET_DATA_SIZE : begin
             cfg_state_after_wait <= S_CFG_GET_CMD;
             cfg_state <= S_CFG_MEM_WAIT;
-            rom_addr <= rom_addr + 1;
+            rom_addr <= rom_addr + 1; // Increment address for next state
             case(rom_data) 
+							// Read how many bytes of data our command will send
               8'hFF: begin
+								// If FF, no bytes of data
+								// Set delay to have some wait time between setting and getting
                 cfg_bytes_remaining <= 0;
                 cfg_delay_counter <= CFG_CMD_DELAY;
               end
               8'h00: begin
+								// If null byte, go to end
                 cfg_bytes_remaining <= 0;
                 cfg_delay_counter <= 0;
                 cfg_state <= S_CFG_DONE;
@@ -194,27 +205,36 @@ always_ff @(posedge clk) begin : main_fsm
             cfg_state <= S_CFG_MEM_WAIT;
           end
           S_CFG_SEND_CMD : begin
-            data_commandb <= 0;
+						// Note: has i_valid set with CL and i_data set to rom_data
+						// Sends command specified by current address
+            data_commandb <= 0; // Sending command 
             if(rom_data == 0) begin
+							// If null byte, move to end
               cfg_state <= S_CFG_DONE;
             end else begin
+							// Otherwise, wait for SPI
               cfg_state <= S_CFG_SPI_WAIT;
               cfg_state_after_wait <= S_CFG_GET_DATA;
             end
           end
           S_CFG_GET_DATA: begin
-            data_commandb <= 1;
-            rom_addr <= rom_addr + 1;
+						// While cfg_bytes_remaining > 0, loop between get and send data
+            data_commandb <= 1; // Sending data
+            rom_addr <= rom_addr + 1; // Increment address for next state
             if(cfg_bytes_remaining > 0) begin
+							// Send the new data
               cfg_state_after_wait <= S_CFG_SEND_DATA;
               cfg_state <= S_CFG_MEM_WAIT;
               cfg_bytes_remaining <= cfg_bytes_remaining - 1;
             end else begin
+							// Read the next command
               cfg_state_after_wait <= S_CFG_GET_DATA_SIZE;
               cfg_state <= S_CFG_MEM_WAIT;
             end
           end
           S_CFG_SEND_DATA: begin
+						// Note: has i_valid set with CL and i_data set to rom_data
+						// Sends data specified by current address
             cfg_state_after_wait <= S_CFG_GET_DATA;
             cfg_state <= S_CFG_SPI_WAIT;
           end
@@ -222,6 +242,7 @@ always_ff @(posedge clk) begin : main_fsm
             state <= S_START_FRAME; // S_TX_PIXEL_DATA_START; //TODO@(avinash)
           end
           S_CFG_SPI_WAIT : begin
+						// Wait until delay counter reaches 0 and spi is ready
             if(cfg_delay_counter > 0) cfg_delay_counter <= cfg_delay_counter-1;
             else if (i_ready) begin
                cfg_state <= cfg_state_after_wait;
@@ -231,30 +252,42 @@ always_ff @(posedge clk) begin : main_fsm
           end
           S_CFG_MEM_WAIT : begin
             // If you had a memory with larger or unknown latency you would put checks in this state to wait till the data was ready.
+						// State to wait a bit, then set cfg_state_after_wait to cfg_state
             cfg_state <= cfg_state_after_wait;
           end
           default: cfg_state <= S_CFG_DONE;
         endcase
       end
       S_WAIT_FOR_SPI: begin
+				// Wait until SPI signals ready
         if(i_ready) begin
           state <= state_after_wait;
         end
       end
       S_START_FRAME: begin
-        data_commandb <= 0;
+				// Note: has i_valid set with CL and i_data set to current_command
+				// Also has current_command set to RAMWR and write mode to WRITE_8
+				// Sends RAMWR command to device
+        data_commandb <= 0; // Sending command
         state <= S_WAIT_FOR_SPI;
         state_after_wait <= S_TX_PIXEL_DATA_START;
       end
       S_TX_PIXEL_DATA_START: begin
-        data_commandb <= 1;
+				// Note: has i_valid set with CL and i_data set to pixel_color
+				// Sends the current pixel color to the device
+        data_commandb <= 1; // Sending data
         state_after_wait <= S_INCREMENT_PIXEL;
         state <= S_WAIT_FOR_SPI;
       end
       S_TX_PIXEL_DATA_BUSY: begin
+				// Unreachable?
         if(i_ready) state <= S_INCREMENT_PIXEL;
       end
       S_INCREMENT_PIXEL: begin
+				// Increments current pixel
+				// Increments x normally, resets x to 0 and increments y when x is at
+				// the edge of the screen
+				// Moves to start when y reaches end of screen
         state <= S_TX_PIXEL_DATA_START;
         if(pixel_x < (DISPLAY_WIDTH-1)) begin
           pixel_x <= pixel_x + 1;

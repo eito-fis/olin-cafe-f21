@@ -58,6 +58,7 @@ always_ff @(posedge clk) begin : i2c_fsm
     scl <= 1;
     bit_counter <= 0;
     o_data <= 0;
+		// Store incoming information
     o_valid <= 0;
     i_ready <= 1;
     state <= S_IDLE;
@@ -69,13 +70,17 @@ always_ff @(posedge clk) begin : i2c_fsm
         cooldown_counter <= COOLDOWN_CYCLES;
         o_valid <= 0;
         state <= S_START;
+				// Create address bitstring, which is address + mode
         addr_buffer <= {i_addr, mode};
         data_buffer <= i_data;
         bit_counter <= 7;
+				// Start divider counter
         clk_divider_counter <= DIVIDER_COUNT-1;
       end
       else begin
+				// Raise serial clock edge
         scl <= 1;
+				// Wait until cooldown counter reaches 0 before setting ready
         if(cooldown_counter > 0) begin
           i_ready <= 0;
           cooldown_counter <= cooldown_counter - 1;
@@ -84,14 +89,24 @@ always_ff @(posedge clk) begin : i2c_fsm
         end
       end
     end else begin // handle all non-idle state here
+		// If divider == 0, start operations
+		// Otherwise, decrement divider
     if (clk_divider_counter == 0) begin
+			// Reset the divider count
       clk_divider_counter <= DIVIDER_COUNT-1;
+			// Flip clock
       scl <= ~scl;
       case(state)
         S_START: begin
+					// If stat state, move to address state
+					// Always occurs on positive edge
+					// Pulls down sda_out w/ combinational logic
           state <= S_ADDR;
         end
         S_ADDR: begin
+					// Increments bit counter thenmoves to acknowledge address state
+					// Output is address indexed by bit counter, set with CL at bottom
+					// (Also only changes on the negative clock)
           if(scl) begin // negative edge logic
             if(bit_counter > 0) bit_counter <= bit_counter - 1;
           // end else begin // positive edge logic
@@ -101,6 +116,13 @@ always_ff @(posedge clk) begin : i2c_fsm
         S_ACK_ADDR: begin
           // $display("[i2c controller] waiting for ack on address 0x%h, addr[0] = %b", addr_buffer[7:1], addr_buffer[0]);
           //if(~sda) begin
+						// Not sure why waiting for the acknowledge is commented out?
+						// Should wait for sda to get pulled down by the seconday device
+						//
+						// Change to write or read state depending on the mode
+						// Also ensures the state switches on the right clock edge
+						// (We read on a postive edge and write on negative edges)
+						// Important to note that sda floats in this state
             bit_counter <= 7;
             case(addr_buffer[0]) 
               WRITE_8BIT_REGISTER : begin
@@ -122,8 +144,12 @@ always_ff @(posedge clk) begin : i2c_fsm
 
         S_RD_DATA : begin
           if(~scl) begin
+						// Store incoming information
+						// Stores incoming bit in first bit,
+						// while shifting all other bits to the left by one
             data_buffer[0] <= sda;
             data_buffer[7:1] <= data_buffer[6:0];
+						// Decrement bit counter, switch to acknowledge read when hits 0
             if(bit_counter > 0) begin
               bit_counter <= bit_counter - 1;
             end
@@ -133,7 +159,12 @@ always_ff @(posedge clk) begin : i2c_fsm
           end
         end
         S_ACK_RD : begin
+					// Note that sda is 0 in this state, acknowledging the read
           if(~scl) begin // positive edge
+						// Ends read
+						// Moves to stop state
+						// Writes data buffer to output data
+						// Signals that data has been read with o_valid
             state <= S_STOP;
             o_data <= data_buffer;
             o_valid <= 1;
@@ -141,18 +172,24 @@ always_ff @(posedge clk) begin : i2c_fsm
         end
         S_WR_DATA: begin
           if(scl) begin // negative edge logic
+						// Decrements bit counter on negative edge
             bit_counter <= bit_counter - 1;
             if(bit_counter > 0) begin  
               // data_buffer[0] <= 1'b1; // Shift in ones to leave SDA as default high. More for the prettiness of the waveform, it shouldn't matter.
+							// Shift data_buffer to the left by 1
+							// Important as the CL output of this state is the MSB of data_buffer
               data_buffer[7:1] <= data_buffer[6:0];
             end
           end
+					// When bit_counter overflow back to all 1s, move to acknowledge write state
           else if(&bit_counter) begin
               state <= S_ACK_WR;
           end
         end
         S_ACK_WR: begin
           if(scl) begin // negative edge logic? //TODO(avinash)
+						// Moves to stop state
+						// Doesn't check for any acknowledgment? 
             state <= S_STOP;
             if(~sda) begin
             end
@@ -160,6 +197,8 @@ always_ff @(posedge clk) begin : i2c_fsm
         end
 
         S_STOP: begin
+					// Stop state, moves to idle
+					// Note sure why we don't go straight to idle?
           state <= S_IDLE;
         end
         S_ERROR: begin
@@ -184,7 +223,7 @@ endcase
 
 always_comb case(state)
   S_START: sda_out = 0; // Start signal.
-  S_ADDR: sda_out = addr_buffer[bit_counter[2:0]];
+  S_ADDR: sda_out = addr_buffer[bit_counter[2:0]]; // Address indexed by bit counter is written
   S_WR_DATA : sda_out = data_buffer[7]; //data_buffer[bit_counter];
   S_ACK_RD : sda_out = 0;
   default : sda_out = 0; //TODO
