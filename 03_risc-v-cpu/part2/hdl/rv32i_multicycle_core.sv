@@ -53,7 +53,7 @@ register_file REGISTER_FILE(
 // Non-architecture register: save register read data for future cycles.
 wire [31:0] reg_A, reg_B;
 register #(.N(32)) REGISTER_A (.clk(clk), .rst(rst), .ena(1'b1), .d(reg_data1), .q(reg_A));
-register #(.N(32)) REGISTER_B (.clk(clk), .rst(rst), .ena(1'b1), .d(reg_data1), .q(reg_B));
+register #(.N(32)) REGISTER_B (.clk(clk), .rst(rst), .ena(1'b1), .d(reg_data2), .q(reg_B));
 always_comb mem_wr_data = reg_B;
 
 // ALU and related control signals
@@ -279,11 +279,27 @@ always_comb begin : MULTICYCLE_FSM_COMB_OUTPUTS
       alu_src_a = ALU_SRC_A_RF;
       alu_src_b = ALU_SRC_B_RF;
       IR_write = 0;
-      ALU_ena = 0;
+      ALU_ena = 1;
       mem_data_ena = 0;
       mem_src = MEM_SRC_PC;
       result_src = RESULT_SRC_ALU;
-      alu_control = ALU_INVALID;
+      case(funct3)
+        FUNCT3_SLLR : alu_control = ALU_SLL;
+        FUNCT3_SLTR : alu_control = ALU_SLT;
+        FUNCT3_SLTRU : alu_control = ALU_SLTU;
+        FUNCT3_XORR : alu_control = ALU_XOR;
+        FUNCT3_ORR : alu_control = ALU_OR;
+        FUNCT3_ANDR : alu_control = ALU_AND;
+				FUNCT3_ADD_SUB_R : begin
+          if(funct7[5]) alu_control = ALU_SUB;
+          else alu_control = ALU_ADD;
+				end
+        FUNCT3_SHIFT_RIGHT_R : begin
+          if(funct7[5]) alu_control = ALU_SRA;
+          else alu_control = ALU_SRL;
+        end
+        default: alu_control = ALU_INVALID;
+      endcase
     end
     S_EXECUTE_I: begin
       mem_wr_ena = 0;

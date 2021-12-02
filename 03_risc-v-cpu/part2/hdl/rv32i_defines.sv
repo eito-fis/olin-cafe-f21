@@ -32,6 +32,17 @@ typedef enum logic [2:0] {
 } funct3_load_t;
 
 typedef enum logic [2:0] {
+  FUNCT3_ADD_SUB_R = 3'b000,
+  FUNCT3_SLLR = 3'b001,
+  FUNCT3_SLTR = 3'b010,
+  FUNCT3_SLTRU = 3'b011,
+  FUNCT3_XORR = 3'b100,
+  FUNCT3_SHIFT_RIGHT_R = 3'b101,
+  FUNCT3_ORR = 3'b110,
+  FUNCT3_ANDR = 3'b111
+} funct3_rtype_t;
+
+typedef enum logic [2:0] {
   FUNCT3_ADDI = 3'b000,
   FUNCT3_SLLI = 3'b001,
   FUNCT3_SLTI = 3'b010,

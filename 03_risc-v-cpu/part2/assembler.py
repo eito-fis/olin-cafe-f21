@@ -69,7 +69,7 @@ class AssemblyProgram:
                 else:
                     f.write(bits.bin + "\n")
         return 0
-        
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -88,11 +88,11 @@ def main():
             ap.parse_line(line)
     if args.verbose:
         print(f"Parsed {len(ap.parsed_lines)} instructions. Label table:")
-        print("  " + ",\n  ".join([f"{k} -> {ap.labels[k]}" for k in ap.labels]))   
+        print("  " + ",\n  ".join([f"{k} -> {ap.labels[k]}" for k in ap.labels]))
     if args.output:
         sys.exit(ap.write_mem(args.output, hex_notbin=not 'memb' in args.output))
     sys.exit(0)
-            
+
 
 if __name__ == "__main__":
     main()
